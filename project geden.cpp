@@ -71,7 +71,7 @@ void tambahkanpekerja(listpekerja *list, const char *nama){
 
 void tampilkananggota(listpekerja *list){
     if(list->head == NULL){
-        printf("tidak ada pekerja");
+        printf("tidak ada pekerja\n\n");
         return;
     }
     AnggotaNode* data = list->head;
@@ -91,7 +91,7 @@ void enqueue(Queue *queue, const char *jobdeks, const char *deskripsi){
         queue->belakang->next = tugas;
         queue->belakang = tugas;
     }
-    printf("tugas '%s' dengan deskripsi '%s' baru saja ditambahkan.\n", jobdesks, deskripsi);
+    printf("tugas '%s' dengan deskripsi '%s' baru saja ditambahkan.\n", jobdeks, deskripsi);
 }
 
 void tambahkan_Jobdeks(listpekerja *list, const char *namapekerja, const char *jobdeks, const char *deskripsi){
@@ -108,10 +108,11 @@ void tambahkan_Jobdeks(listpekerja *list, const char *namapekerja, const char *j
 
 void jobdeks_selesai(Queue *queue){
     if(queue->depan == NULL){
-        printf("tidak ada pekerjaan");
+        printf("tidak ada pekerjaan\n\n");
+        return;
     }
     QueueNode *data = queue ->depan;
-    printf("tugas %s telah selesai", data->tugas);
+    printf("tugas %s telah selesai\n", data->tugas);
     queue->depan = queue->depan->next;
     if(queue->depan == NULL){
         queue->belakang = NULL;
@@ -124,10 +125,9 @@ void tampilkan_jobdeks(Queue *queue){
         printf("tidak ada tugas yang sedang menunggu.\n");
     }else {
         QueueNode *data = queue ->depan;
-        printf("list jobdeks");
         while (data != NULL){
             printf("- Tugas: %s\n Deskripsi: %s\n", data->tugas, data->deskripsi);
-            data = data ->next;
+            data = data->next;
         }
         
     }
@@ -183,6 +183,7 @@ int main(){
                 break;
             case 3:
                 tampilkananggota(&keperluan);
+                printf("masukkan nama pekerja yang menyelesaikan pekerjaan : ");
                 fgets(nama, sizeof(nama), stdin);
                 nama[strcspn(nama, "\n")] = 0;
                 data = keperluan.head;
@@ -199,7 +200,9 @@ int main(){
                 break;
             case 4:
                 tampilkan(&keperluan);
+                break;
             default:
+                printf("pilihan anda tidak valid");
                 break;
         }
     }while(pilih != 5);
