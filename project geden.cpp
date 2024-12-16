@@ -121,12 +121,12 @@ void jobdeks_selesai(Queue *queue){
 
 void tampilkan_jobdeks(Queue *queue){
     if(queue->depan == NULL){
-        printf("mengangur");
+        printf("tidak ada tugas yang sedang menunggu.\n");
     }else {
         QueueNode *data = queue ->depan;
         printf("list jobdeks");
         while (data != NULL){
-            printf("  %s\n", data);
+            printf("- Tugas: %s\n Deskripsi: %s\n", data->tugas, data->deskripsi);
             data = data ->next;
         }
         
@@ -175,7 +175,11 @@ int main(){
                 printf("masukan jobdeks: ");
                 fgets(jobdeks, sizeof(jobdeks), stdin);
                 jobdeks[strcspn(jobdeks,"\n")] = 0;
-                tambahkan_Jobdeks(&keperluan, nama, jobdeks);
+                printf("masukkan deskripsi jobdesk : ");
+                char deskripsi[100];
+                fgets(deskripsi, sizeof(deskripsi), stdin);
+                deskripsi[strcspn(deskripsi, "\n")] = 0;
+                tambahkan_Jobdeks(&keperluan, nama, jobdeks, deskripsi);
                 break;
             case 3:
                 tampilkananggota(&keperluan);
