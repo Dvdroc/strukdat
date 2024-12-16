@@ -4,6 +4,7 @@
 
 typedef struct QueueNode {
     char tugas[50];
+    char deskripsi[100];
     struct QueueNode *next;
 }QueueNode;
 
@@ -33,13 +34,14 @@ void cekperkeja(listpekerja *list){
     list->Pnew =  NULL;
 }
 
-QueueNode *CreatQueueuNode(const char *tugas){
+QueueNode *CreatQueueuNode(const char *tugas, const char *deskripsi){
      QueueNode *newNode = (QueueNode*)malloc(sizeof(QueueNode));
     if (!newNode) {
         printf("tidak bisa mengalokasikan memori!\n");
         exit(EXIT_FAILURE);
     }
     strcpy(newNode->tugas, tugas);
+    strcpy(newNode->deskripsi, deskripsi);
     newNode->next = NULL;
     return newNode;
 }
@@ -81,22 +83,22 @@ void tampilkananggota(listpekerja *list){
     printf("\n");
 }
 
-void enqueue(Queue *queue, const char *jobdeks){
-    QueueNode *tugas = CreatQueueuNode(jobdeks);
+void enqueue(Queue *queue, const char *jobdeks, const char *deskripsi){
+    QueueNode *tugas = CreatQueueuNode(jobdeks, deskripsi);
     if(queue->belakang == NULL){
         queue->depan = queue->belakang = tugas;
     }else{
         queue->belakang->next = tugas;
         queue->belakang = tugas;
     }
-    printf("tugas %s baru saja ditambahkan\n");
+    printf("tugas '%s' dengan deskripsi '%s' baru saja ditambahkan.\n", jobdesks, deskripsi);
 }
 
-void tambahkan_Jobdeks(listpekerja *list, const char *namapekerja, const char *jobdeks){
+void tambahkan_Jobdeks(listpekerja *list, const char *namapekerja, const char *jobdeks, const char *deskripsi){
     AnggotaNode *data = list->head;
     while(data != NULL){
         if (strcmp(data->nama, namapekerja) == 0){
-            enqueue(&data->To_do_list, jobdeks);
+            enqueue(&data->To_do_list, jobdeks, deskripsi);
             return;
         }
         data = data->next;
