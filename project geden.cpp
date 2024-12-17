@@ -3,8 +3,9 @@
 #include <string.h>
 
 typedef struct QueueNode {
-    char tugas[50];
-    char deskripsi[100];
+    char id[10];
+    char tugas[100];
+    char status[50];
     struct QueueNode *next;
 }QueueNode;
 
@@ -14,6 +15,7 @@ typedef struct{
 }Queue;
 
 typedef struct AnggotaNode{
+    char id[10];
     char nama[50];
     Queue To_do_list;
     struct AnggotaNode* prev;
