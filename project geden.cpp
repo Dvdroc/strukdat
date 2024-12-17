@@ -2,25 +2,41 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct QueueNode {
+typedef struct TugasNode {
     char id[10];
     char tugas[100];
     char status[50];
-    struct QueueNode *next;
-}QueueNode;
+    struct TugasNode *next;
+}TugasNode;
 
-typedef struct{
-    QueueNode *depan;
-    QueueNode *belakang;
+typedef struct {
+    TugasNode *depan;
+    TugasNode *belakang;
 }Queue;
 
-typedef struct AnggotaNode{
+typedef struct AnggotaNode {
     char id[10];
     char nama[50];
     Queue To_do_list;
     struct AnggotaNode* prev;
     struct AnggotaNode* next;
 }AnggotaNode;
+
+typedef struct TugasAnggota {
+    char tugasId[10];
+    char tugas[100];
+    char status[20];
+    struct TugasAnggota* next;
+}TugasAnggota;
+
+typedef struct ProjekNode {
+    char id[10];
+    char nama[50];
+    struct AnggotaNode* pekerja;
+    Queue tgs;
+    struct ProjekNode* kiri;
+    struct ProjekNode* kanan;
+}ProjekNode;
 
 typedef struct {
     AnggotaNode* head;
@@ -36,8 +52,8 @@ void cekperkeja(listpekerja *list){
     list->Pnew =  NULL;
 }
 
-QueueNode *CreatQueueuNode(const char *tugas, const char *deskripsi){
-     QueueNode *newNode = (QueueNode*)malloc(sizeof(QueueNode));
+TugasNode *CreatQueueuNode(const char *tugas, const char *deskripsi){
+     TugasNode *newNode = (TugasNode*)malloc(sizeof(TugasNode));
     if (!newNode) {
         printf("tidak bisa mengalokasikan memori!\n");
         exit(EXIT_FAILURE);
@@ -86,7 +102,7 @@ void tampilkananggota(listpekerja *list){
 }
 
 void enqueue(Queue *queue, const char *jobdeks, const char *deskripsi){
-    QueueNode *tugas = CreatQueueuNode(jobdeks, deskripsi);
+    TugasNode *tugas = CreatQueueuNode(jobdeks, deskripsi);
     if(queue->belakang == NULL){
         queue->depan = queue->belakang = tugas;
     }else{
@@ -113,7 +129,7 @@ void jobdeks_selesai(Queue *queue){
         printf("tidak ada pekerjaan\n\n");
         return;
     }
-    QueueNode *data = queue ->depan;
+    TugasNode *data = queue ->depan;
     printf("tugas %s telah selesai\n", data->tugas);
     queue->depan = queue->depan->next;
     if(queue->depan == NULL){
@@ -126,7 +142,7 @@ void tampilkan_jobdeks(Queue *queue){
     if(queue->depan == NULL){
         printf("tidak ada tugas yang sedang menunggu.\n");
     }else {
-        QueueNode *data = queue ->depan;
+        TugasNode *data = queue ->depan;
         while (data != NULL){
             printf("- Tugas: %s\n Deskripsi: %s\n", data->tugas, data->deskripsi);
             data = data->next;
@@ -164,10 +180,12 @@ int main(){
         getchar();
         switch (pilih){
             case 1:
-                printf("masukan nama pekerja: ");
+                printf("Masukkan id proyek: ");
+                fgets(projId, sizeof(projId), stdin);
+                projId[strcspn(projId, "\n")] = 0;
+                printf("masukan nama proyek: ");
                 fgets(nama, sizeof(nama), stdin);
                 nama[strcspn(nama,"\n")] = 0;
-                tambahkanpekerja(&keperluan, nama);
                 break;
             case 2:
                 tampilkananggota(&keperluan);
