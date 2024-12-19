@@ -130,6 +130,20 @@ void addTugas(Queue* queue, char* id, char* tugas, char* status) {
     }
 }
 
+void dequeue(Queue *queue) {
+    if (queue->depan == NULL) {
+        printf("Tidak ada tugas untuk dihapus, antrian kosong!\n");
+        return;
+    }
+    TugasNode *temp = queue->depan;
+    printf("Tugas dengan ID '%s' telah selesai dan dihapus dari antrian.\n", temp->id);
+    queue->depan = queue->depan->next;
+    if (queue->depan == NULL) {
+        queue->belakang = NULL;
+    }
+    free(temp);
+}
+
 void showAnggota(AnggotaNode* head){
     if(!head) {
         printf("Tidak ada pekerja.\n\n");
@@ -207,7 +221,7 @@ int main(){
         printf("1. tambahkan proyek\n");
         printf("2. tambahkan pekerja\n");
         printf("3. tambahkan jobdesk\n");
-        // printf("4. pekerjaan yang sudah selesai\n");
+        printf("4. pekerjaan yang sudah selesai\n");
         printf("5. tampilkan secara lengkap\n");
         printf("masukan pilihan:");
         scanf("%d", &pilih);
@@ -267,6 +281,18 @@ int main(){
                     printf("Proyek tidak ada!"\n);
                 }
                 break;
+
+            case 4:
+                printf("Masukkan ID proyek: ");
+                scanf("%s", projekId);
+                projekBtr = cariProjek(root, projekId);
+                if (!projekBtr) {
+                    printf("Proyek tidak ditemukan!\n");
+                    break;
+                }
+                dequeue(&projekBtr->list);
+                break;
+            
             case 5:
                 showProjek(root);
                 break;
