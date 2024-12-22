@@ -88,7 +88,6 @@ void addAnggota(ProjekNode* projek, char* id, char* nama) {
     }
     strcpy(newnode->id,id);
     strcpy(newnode->nama,nama);
-    cekQueue(&newnode->list);
     newnode->list = NULL;
     newnode->next = projek->pekerja;
     projek->pekerja = newnode;
@@ -149,7 +148,7 @@ void showAnggota(AnggotaNode* head){
 void showTugasAnggota(TugasAnggota* head) {
     TugasAnggota* tmp = head;
     while (tmp) {
-        printf("      ID: %s, Tugas: %s, Status: %s\n", tmp->id, tmp->tugas, tmp->status);
+        printf("      ID: %s, Tugas: %s, Status: %s\n", tmp->tugasId, tmp->tugas, tmp->status);
         tmp = tmp->next;
     }
 }
