@@ -14,19 +14,19 @@ typedef struct {
     TugasNode *belakang;
 }Queue;
 
-typedef struct AnggotaNode {
-    char id[10];
-    char nama[100];
-    TugasAnggota* list;
-    struct AnggotaNode* next;
-}AnggotaNode;
-
 typedef struct TugasAnggota {
     char tugasId[10];
     char tugas[5000];
     char status[300];
     struct TugasAnggota* next;
 }TugasAnggota;
+
+typedef struct AnggotaNode {
+    char id[10];
+    char nama[100];
+    TugasAnggota* list;
+    struct AnggotaNode* next;
+}AnggotaNode;
 
 typedef struct ProjekNode {
     char id[10];
@@ -101,7 +101,7 @@ void addTugasAnggota(ProjekNode* projek, char* anggotaId, char* tugasId, char* t
     }
     if (anggota) {
         TugasAnggota* adaTugas = (TugasAnggota*)malloc(sizeof(TugasAnggota));
-        strcpy(adaTugas->tugasId, tuggasId);
+        strcpy(adaTugas->tugasId, tugasId);
         strcpy(adaTugas->tugas, tugas);
         strcpy(adaTugas->status, status);
         adaTugas->next = anggota->list;
