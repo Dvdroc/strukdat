@@ -215,9 +215,17 @@ int main(){
                 printf("Masukkan ID Proyek: ");
                 fgets(projekId, sizeof(projekId), stdin);
                 projekId[strcspn(projekId, "\n")] = 0;
+                if (strlen(projekId) == 0) {
+                    printf("ID Proyek tidak boleh kosong.\n");
+                    break;
+                    }
                 printf("Masukan Nama Proyek: ");
                 fgets(projekNama, sizeof(projekNama), stdin);
                 projekNama[strcspn(projekNama,"\n")] = 0;
+                if (strlen(projekNama) == 0) {
+                    printf("nama projek tidak boleh kosong.\n");
+                    break;
+                    }
                 root = createProjek(root, projekId, projekNama);
                 printf("Proyek '%s' berhasil dibuat!\n", projekNama);
                 break;
@@ -225,16 +233,28 @@ int main(){
                 printf("Masukkan ID Proyek: ");
                 fgets(projekId, sizeof(projekId), stdin);
                 projekId[strcspn(projekId, "\n")] = 0;
+                if (strlen(projekId) == 0) {
+                    printf("ID Proyek tidak boleh kosong.\n");
+                    break;
+                    }
                 projekBtr = cariProjek(root, projekId);
                 if (projekBtr) {
                     printf("Masukan ID Pekerja: ");
                     fgets(anggotaId, sizeof(anggotaId), stdin);
                     anggotaId[strcspn(anggotaId,"\n")] = 0;
+                    if (strlen(anggotaId) == 0) {
+                        printf("ID Pekerja tidak boleh kosong.\n");
+                        break;
+                        }
                     printf("Masukan Nama Pekerja: ");
                     fgets(anggotaNama, sizeof(anggotaNama), stdin);
                     anggotaNama[strcspn(anggotaNama,"\n")] = 0;
+                    if (strlen(anggotaNama) == 0) {
+                        printf("Nama Pekerja tidak boleh kosong.\n");
+                        break;
+                        }
                     addAnggota(projekBtr, anggotaId, anggotaNama);
-                    printf("Pekerja '%s' berhasil ditambahkan ke proyek!\n");
+                    printf("Pekerja '%s' berhasil ditambahkan ke proyek!\n", anggotaNama);
                     }
                 else {
                     printf("Proyek tidak ada!\n");
@@ -244,20 +264,40 @@ int main(){
                 printf("Masukkan ID Proyek: ");
                 fgets(projekId, sizeof(projekId), stdin);
                 projekId[strcspn(projekId, "\n")] = 0;
+                if (strlen(projekId) == 0) {
+                    printf("ID Proyek tidak boleh kosong.\n");
+                    break;
+                    }
                 projekBtr = cariProjek(root, projekId);
                 if (projekBtr) {
                     printf("Masukan ID Pekerja: ");
                     fgets(anggotaId, sizeof(anggotaId), stdin);
                     anggotaId[strcspn(anggotaId,"\n")] = 0;
+                    if (strlen(anggotaId) == 0) {
+                        printf("ID Pekerja tidak boleh kosong.\n");
+                        break;
+                        }
                     printf("Masukan ID Jobdesk: ");
                     fgets(tugasId, sizeof(tugasId), stdin);
                     tugasId[strcspn(tugasId,"\n")] = 0;
+                    if (strlen(tugasId) == 0) {
+                        printf("ID Jobdesk tidak boleh kosong.\n");
+                        break;
+                        }
                     printf("Masukan Jobdesk Pekerja: ");
                     fgets(descTugas, sizeof(descTugas), stdin);
                     descTugas[strcspn(descTugas,"\n")] = 0;
+                    if (strlen(descTugas) == 0) {
+                        printf("Deskripsi Tugas tidak boleh kosong.\n");
+                        break;
+                        }
                     printf("Status Jobdesk (Belum/Proses): ");
                     fgets(statTugas, sizeof(statTugas), stdin);
                     statTugas[strcspn(statTugas,"\n")] = 0;
+                    if (strlen(statTugas) == 0) {
+                        printf("Status Tugas tidak boleh kosong.\n");
+                        break;
+                        }
                     addTugasAnggota(projekBtr, anggotaId, tugasId, descTugas, statTugas);
                     printf("Jobdesk '%s' berhasil ditambahkan!\n", descTugas);
                 }
@@ -269,13 +309,20 @@ int main(){
                 printf("Masukkan ID Proyek: ");
                 fgets(projekId, sizeof(projekId), stdin);
                 projekId[strcspn(projekId, "\n")] = 0;
+                if (strlen(projekId) == 0) {
+                    printf("ID Proyek tidak boleh kosong.\n");
+                    break;
+                    }
                 projekBtr = cariProjek(root, projekId);
 
                 if (projekBtr) {
                     printf("Masukkan ID Pekerja: ");
                     fgets(anggotaId, sizeof(anggotaId), stdin);
                     anggotaId[strcspn(anggotaId, "\n")] = 0;
-
+                    if (strlen(anggotaId) == 0) {
+                        printf("ID Pekerja tidak boleh kosong.\n");
+                        break;
+                        }
                     AnggotaNode* pekerja = projekBtr->pekerja;
                     while (pekerja && strcmp(pekerja->id, anggotaId) != 0) {
                         pekerja = pekerja->next;
