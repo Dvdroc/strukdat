@@ -189,7 +189,7 @@ void showProjek(ProjekNode* root) {
         printf("Pekerja:\n");
         showAnggota(root->pekerja);
         printf("Tugas:\n");
-        showTugas(root->list);
+        showTugas(&root->list);
         showProjek(root->kanan);
     }
 }
