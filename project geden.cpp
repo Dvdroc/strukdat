@@ -166,7 +166,6 @@ void showTugas(Queue *queue) {
     }
 }
 
-/*
 void dltTugas(Queue *queue){
     if(queue->depan == NULL){
         printf("tidak ada pekerjaan\n\n");
@@ -180,7 +179,6 @@ void dltTugas(Queue *queue){
     }
     free(data);
 }
-*/
 
 void showProjek(ProjekNode* root) {
     if (root) {
@@ -206,8 +204,9 @@ int main(){
         printf("1. tambahkan proyek\n");
         printf("2. tambahkan pekerja\n");
         printf("3. tambahkan jobdesk\n");
-        // printf("4. pekerjaan yang sudah selesai\n");
+        printf("4. pekerjaan yang sudah selesai\n");
         printf("5. tampilkan secara lengkap\n");
+        printf("6. keluar program\n");
         printf("masukan pilihan:");
         scanf("%d", &pilih);
         getchar();
@@ -266,13 +265,55 @@ int main(){
                     printf("Proyek tidak ada!\n");
                 }
                 break;
+            case 4:
+                printf("Masukkan ID Proyek: ");
+                fgets(projekId, sizeof(projekId), stdin);
+                projekId[strcspn(projekId, "\n")] = 0;
+                projekBtr = cariProjek(root, projekId);
+
+                if (projekBtr) {
+                    printf("Masukkan ID Pekerja: ");
+                    fgets(anggotaId, sizeof(anggotaId), stdin);
+                    anggotaId[strcspn(anggotaId, "\n")] = 0;
+
+                    AnggotaNode* pekerja = projekBtr->pekerja;
+                    while (pekerja && strcmp(pekerja->id, anggotaId) != 0) {
+                        pekerja = pekerja->next;
+                    }
+
+                    if (pekerja) {
+                        TugasAnggota* tugas = pekerja->list;
+                        if (!tugas) {
+                            printf("Pekerja ini tidak memiliki tugas.\n");
+                        } else {
+                            printf("Menyelesaikan semua tugas pekerja '%s':\n", pekerja->nama);
+                            while (tugas) {
+                                printf("  Menyelesaikan tugas '%s' (ID: %s)...\n", tugas->tugas, tugas->tugasId);
+                                TugasAnggota* selesai = tugas;
+                                tugas = tugas->next;
+                                free(selesai);
+                            }
+                            pekerja->list = NULL;
+                            printf("Semua tugas pekerja '%s' telah selesai.\n", pekerja->nama);
+                        }
+                    } else {
+                        printf("Pekerja dengan ID '%s' tidak ditemukan di proyek ini.\n", anggotaId);
+                    }
+                } else {
+                    printf("Proyek dengan ID '%s' tidak ditemukan.\n", projekId);
+                }
+                break;
+
             case 5:
                 showProjek(root);
+                break;
+            case 6:
+                printf("keluar dari perogram");
                 break;
             default:
                 printf("pilihan anda tidak valid");
                 break;
         }
-    }while(pilih != 5);
+    }while(pilih != 6);
     return 0;
 }
