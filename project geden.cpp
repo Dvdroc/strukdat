@@ -264,7 +264,7 @@ int main(){
                     printf("Jobdesk '%s' berhasil ditambahkan!\n", descTugas);
                 }
                 else {
-                    printf("Proyek tidak ada!"\n);
+                    printf("Proyek tidak ada!\n");
                 }
                 break;
             case 5:
