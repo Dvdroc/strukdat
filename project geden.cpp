@@ -189,9 +189,10 @@ void showTugasAnggota(TugasAnggota* head) {
     }
 }
 
-void showTugas(Queue *queue) {
+void showTugas(Queue* queue) {
     if(queue->depan == NULL) {
-        printf("Tidak ada tugas, pekerja ngantin aja.\n");
+        printf("tidak ada tugas.\n");
+        return;
     }
     else {
         TugasNode* data = queue ->depan;
@@ -217,10 +218,6 @@ void dltTugas(Queue *queue){
 }
 
 void showProjek(ProjekNode* root) {
-    if (!root) {
-        printf("  Tidak ada tugas untuk pekerja.\n");
-        return;
-    }
     if (root) {
         showProjek(root->kiri);
         printf("\nID Proyek: %s, Nama Proyek: %s\n", root->id, root->nama);
@@ -229,7 +226,9 @@ void showProjek(ProjekNode* root) {
         printf("Tugas:\n");
         showTugas(&root->list);
         showProjek(root->kanan);
-    }
+    }else 
+        printf("proyek belum ditambahkan.\n");
+        return;
 }
 
 int main(){
