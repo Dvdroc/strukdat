@@ -64,6 +64,11 @@ ProjekNode* cariProjek(ProjekNode* root, char* id) {
 }
 
 ProjekNode* createProjek(ProjekNode* root, char* id, char* nama) {
+    //validasi id apakah ada yang sama
+    if (cariProjek(root, id)) {
+        printf("Proyek dengan ID '%s' sudah ada.\n", id);
+        return root; 
+    }
     if (!root) {
         ProjekNode* projekBaru = (ProjekNode*)malloc(sizeof(ProjekNode));
         strcpy(projekBaru->id, id);
@@ -73,17 +78,27 @@ ProjekNode* createProjek(ProjekNode* root, char* id, char* nama) {
         projekBaru->kiri = projekBaru->kanan = NULL;
         return projekBaru;
     }
-    if (strcmp(id, root->id) < 0)
+    if (strcmp(id, root->id) < 0){
         root->kiri = createProjek(root->kiri, id, nama);
-    else if (strcmp(id, root->id) > 0)
+    } else if (strcmp(id, root->id) > 0){
         root->kanan = createProjek(root->kanan, id, nama);
+    }
     return root;
 }
 
 void addAnggota(ProjekNode* projek, char* id, char* nama) {
+    //validasi untuk mengecek apa ada duplikasi ID
+    AnggotaNode* current = projek->pekerja;
+    while (current) {
+        if (strcmp(current->id, id) == 0) {
+            printf("Anggota dengan ID '%s' sudah ada di proyek ini.\n", id);
+            return;
+        }
+        current = current->next;
+    }
     AnggotaNode *newnode = (AnggotaNode*)malloc(sizeof(AnggotaNode));
     if(!newnode){
-        printf("tidak bisa mengalokasikan memori!\n");
+        printf("tidak bisa mengalokasikan memori!\n\n");
         exit(EXIT_FAILURE);
     }
     strcpy(newnode->id,id);
@@ -91,30 +106,51 @@ void addAnggota(ProjekNode* projek, char* id, char* nama) {
     newnode->list = NULL;
     newnode->next = projek->pekerja;
     projek->pekerja = newnode;
+    printf("Pekerja '%s' berhasil ditambahkan ke proyek.\n", nama);
 }
 
 void addTugasAnggota(ProjekNode* projek, char* anggotaId, char* tugasId, char* tugas, char* status) {
+       // Mencari pekerja dengan ID yang sesuai
     AnggotaNode* anggota = projek->pekerja;
     while (anggota && strcmp(anggota->id, anggotaId) != 0) {
         anggota = anggota->next;
     }
-    if (anggota) {
-        TugasAnggota* adaTugas = (TugasAnggota*)malloc(sizeof(TugasAnggota));
-        strcpy(adaTugas->tugasId, tugasId);
-        strcpy(adaTugas->tugas, tugas);
-        strcpy(adaTugas->status, status);
-        adaTugas->next = anggota->list;
-        anggota->list = adaTugas;
+    
+    if (!anggota) {
+        // Jika pekerja tidak ditemukan
+        printf("Tidak ada pekerja dengan ID '%s' di proyek ini.\n", anggotaId);
+        return; // Kembali tanpa menambahkan tugas
     }
-    else {
-        printf("Tidak ada pekerja.\n");
+    // Memeriksa apakah tugas sudah ada pada anggota ini
+    TugasAnggota* currentTugas = anggota->list;
+    while (currentTugas) {
+        if (strcmp(currentTugas->tugasId, tugasId) == 0) {
+            printf("Tugas dengan ID '%s' sudah ada untuk pekerja '%s'.\n", tugasId, anggota->nama);
+            return; // Kembalikan tanpa menambahkan tugas yang sama
+        }
+        currentTugas = currentTugas->next;
     }
+    // Jika tidak ditemukan tugas dengan ID yang sama, tambahkan tugas baru
+    TugasAnggota* tugasBaru = (TugasAnggota*)malloc(sizeof(TugasAnggota));
+    if (!tugasBaru) {
+        printf("Gagal mengalokasikan memori untuk tugas baru.\n");
+        return;
+    }
+    strcpy(tugasBaru->tugasId, tugasId);
+    strcpy(tugasBaru->tugas, tugas);
+    strcpy(tugasBaru->status, status);
+    
+    // Menambahkan tugas ke dalam daftar tugas pekerja
+    tugasBaru->next = anggota->list;
+    anggota->list = tugasBaru;
+
+    printf("Jobdesk '%s' berhasil ditambahkan untuk pekerja '%s'.\n", tugas, anggota->nama);
 }
 
 void addTugas(Queue* queue, char* id, char* tugas, char* status) {
     TugasNode* newNode = (TugasNode*)malloc(sizeof(TugasNode));
     if (!newNode) {
-        printf("tidak bisa mengalokasikan memori!\n");
+        printf("tidak bisa mengalokasikan memori!\n\n");
         exit(EXIT_FAILURE);
     }
     strcpy(newNode->id, id);
@@ -181,6 +217,10 @@ void dltTugas(Queue *queue){
 }
 
 void showProjek(ProjekNode* root) {
+    if (!root) {
+        printf("  Tidak ada tugas untuk pekerja.\n");
+        return;
+    }
     if (root) {
         showProjek(root->kiri);
         printf("\nID Proyek: %s, Nama Proyek: %s\n", root->id, root->nama);
@@ -200,7 +240,7 @@ int main(){
     ProjekNode* projekBtr = NULL;
     
     do {
-        printf("menu\n");
+        printf("\nmenu\n");
         printf("1. tambahkan proyek\n");
         printf("2. tambahkan pekerja\n");
         printf("3. tambahkan jobdesk\n");
@@ -226,8 +266,14 @@ int main(){
                     printf("nama projek tidak boleh kosong.\n");
                     break;
                     }
-                root = createProjek(root, projekId, projekNama);
-                printf("Proyek '%s' berhasil dibuat!\n", projekNama);
+                ProjekNode* existingProjek = cariProjek(root, projekId);
+                if (!existingProjek) {
+                    root = createProjek(root, projekId, projekNama);
+                    printf("Proyek '%s' berhasil dibuat!\n", projekNama);
+                    }
+                else {
+                    printf("Proyek dengan ID '%s' sudah ada.\n", projekId);
+                    }
                 break;
             case 2:
                 printf("Masukkan ID Proyek: ");
@@ -254,7 +300,6 @@ int main(){
                         break;
                         }
                     addAnggota(projekBtr, anggotaId, anggotaNama);
-                    printf("Pekerja '%s' berhasil ditambahkan ke proyek!\n", anggotaNama);
                     }
                 else {
                     printf("Proyek tidak ada!\n");
@@ -299,7 +344,6 @@ int main(){
                         break;
                         }
                     addTugasAnggota(projekBtr, anggotaId, tugasId, descTugas, statTugas);
-                    printf("Jobdesk '%s' berhasil ditambahkan!\n", descTugas);
                 }
                 else {
                     printf("Proyek tidak ada!\n");
